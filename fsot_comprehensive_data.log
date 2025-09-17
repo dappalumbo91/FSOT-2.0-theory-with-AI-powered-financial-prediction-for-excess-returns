@@ -1,0 +1,164 @@
+2025-09-17 17:08:18,905 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:18,906 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:18,946 - ERROR - Error training comprehensive model for AAPL: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:19,200 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:19,201 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:19,243 - ERROR - Error training comprehensive model for MSFT: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:19,522 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:19,522 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:19,561 - ERROR - Error training comprehensive model for GOOGL: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:19,815 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:19,816 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:19,858 - ERROR - Error training comprehensive model for NVDA: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:20,126 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:20,126 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:20,164 - ERROR - Error training comprehensive model for TSLA: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:20,848 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:20,849 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:20,908 - ERROR - Error training comprehensive model for SPY: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:21,194 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:21,195 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:21,242 - ERROR - Error training comprehensive model for META: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:21,493 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:21,494 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:21,536 - ERROR - Error training comprehensive model for AMZN: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:21,707 - ERROR - Error fetching comprehensive crypto data for BTC: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:08:21,841 - ERROR - Error fetching comprehensive crypto data for ETH: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:08:22,002 - ERROR - Error fetching comprehensive crypto data for BNB: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:08:22,127 - ERROR - Error fetching comprehensive crypto data for ADA: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:08:22,232 - ERROR - Error fetching comprehensive crypto data for SOL: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:08:22,470 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:22,470 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:22,511 - ERROR - Error training comprehensive model for EURUSD=X: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:22,918 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:22,919 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:22,965 - ERROR - Error training comprehensive model for GBPUSD=X: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:23,348 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:23,348 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:23,420 - ERROR - Error training comprehensive model for USDJPY=X: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:23,680 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:23,681 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:23,726 - ERROR - Error training comprehensive model for GC=F: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:24,088 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:24,088 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:24,132 - ERROR - Error training comprehensive model for CL=F: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:24,450 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:24,451 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:24,497 - ERROR - Error training comprehensive model for SI=F: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:24,882 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:24,883 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:24,937 - ERROR - Error training comprehensive model for ^GSPC: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:25,282 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:25,283 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:25,339 - ERROR - Error training comprehensive model for ^IXIC: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:08:25,723 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:08:25,723 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:08:25,773 - ERROR - Error training comprehensive model for ^VIX: 'ComprehensiveDataFramework' object has no attribute '_create_multi_horizon_targets'
+2025-09-17 17:10:58,817 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:10:58,817 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:10:58,877 - ERROR - Error training comprehensive model for AAPL: BaggingRegressor.__init__() got an unexpected keyword argument 'base_estimator'
+2025-09-17 17:10:59,101 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:10:59,102 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:10:59,151 - ERROR - Error training comprehensive model for MSFT: BaggingRegressor.__init__() got an unexpected keyword argument 'base_estimator'
+2025-09-17 17:10:59,474 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:10:59,474 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:10:59,531 - ERROR - Error training comprehensive model for GOOGL: BaggingRegressor.__init__() got an unexpected keyword argument 'base_estimator'
+2025-09-17 17:10:59,811 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:10:59,811 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:10:59,866 - ERROR - Error training comprehensive model for NVDA: BaggingRegressor.__init__() got an unexpected keyword argument 'base_estimator'
+2025-09-17 17:11:00,078 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:00,078 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:00,128 - ERROR - Error training comprehensive model for TSLA: BaggingRegressor.__init__() got an unexpected keyword argument 'base_estimator'
+2025-09-17 17:11:00,397 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:00,398 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:00,457 - ERROR - Error training comprehensive model for SPY: BaggingRegressor.__init__() got an unexpected keyword argument 'base_estimator'
+2025-09-17 17:11:00,765 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:00,766 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:00,822 - ERROR - Error training comprehensive model for META: BaggingRegressor.__init__() got an unexpected keyword argument 'base_estimator'
+2025-09-17 17:11:01,015 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:01,016 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:01,068 - ERROR - Error training comprehensive model for AMZN: BaggingRegressor.__init__() got an unexpected keyword argument 'base_estimator'
+2025-09-17 17:11:01,226 - ERROR - Error fetching comprehensive crypto data for BTC: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:11:01,355 - ERROR - Error fetching comprehensive crypto data for ETH: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:11:01,537 - ERROR - Error fetching comprehensive crypto data for BNB: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:11:01,680 - ERROR - Error fetching comprehensive crypto data for ADA: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:11:01,806 - ERROR - Error fetching comprehensive crypto data for SOL: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:11:02,114 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:02,114 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:02,384 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:02,384 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:02,639 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:02,640 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:03,022 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:03,023 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:03,071 - ERROR - Error training comprehensive model for GC=F: Input X contains infinity or a value too large for dtype('float64').
+2025-09-17 17:11:03,389 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:03,389 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:03,434 - ERROR - Error training comprehensive model for CL=F: Input X contains infinity or a value too large for dtype('float64').
+2025-09-17 17:11:04,702 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:04,703 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:04,752 - ERROR - Error training comprehensive model for SI=F: Input X contains infinity or a value too large for dtype('float64').
+2025-09-17 17:11:04,925 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:04,926 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:04,970 - ERROR - Error training comprehensive model for ^GSPC: Input X contains infinity or a value too large for dtype('float64').
+2025-09-17 17:11:05,163 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:05,164 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:11:05,219 - ERROR - Error training comprehensive model for ^IXIC: BaggingRegressor.__init__() got an unexpected keyword argument 'base_estimator'
+2025-09-17 17:11:05,433 - ERROR - Error adding ultra comprehensive indicators: williams_r() got an unexpected keyword argument 'window'
+2025-09-17 17:11:05,433 - ERROR - Error adding market regime indicators: 'ATR'
+2025-09-17 17:12:05,131 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,131 - ERROR - ['AAPL']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,147 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,148 - ERROR - ['MSFT']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,162 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,162 - ERROR - ['GOOGL']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,176 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,177 - ERROR - ['NVDA']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,191 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,192 - ERROR - ['TSLA']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,205 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,206 - ERROR - ['SPY']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,255 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,256 - ERROR - ['META']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,284 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,285 - ERROR - ['AMZN']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,437 - ERROR - Error fetching comprehensive crypto data for BTC: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:12:05,533 - ERROR - Error fetching comprehensive crypto data for ETH: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:12:05,618 - ERROR - Error fetching comprehensive crypto data for BNB: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:12:05,723 - ERROR - Error fetching comprehensive crypto data for ADA: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:12:05,814 - ERROR - Error fetching comprehensive crypto data for SOL: 'Response' object has no attribute 'raise_status_code'
+2025-09-17 17:12:05,826 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,826 - ERROR - ['EURUSD=X']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,839 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,839 - ERROR - ['GBPUSD=X']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,853 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,853 - ERROR - ['USDJPY=X']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,867 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,867 - ERROR - ['GC=F']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,881 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,881 - ERROR - ['CL=F']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,896 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,896 - ERROR - ['SI=F']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,910 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,910 - ERROR - ['^GSPC']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,924 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,924 - ERROR - ['^IXIC']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
+2025-09-17 17:12:05,938 - ERROR - 
+1 Failed download:
+2025-09-17 17:12:05,939 - ERROR - ['^VIX']: DNSError('Failed to perform, curl: (6) Could not resolve host: query1.finance.yahoo.com. See https://curl.se/libcurl/c/libcurl-errors.html first for more details.')
