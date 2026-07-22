@@ -288,6 +288,11 @@ config/watchlist.yaml
 Standalone MC-only sandbox (optional side project on Desktop):  
 `C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence` — not required to run this repo.
 
+### Full methodology & reproducibility
+
+- **[docs/METHODOLOGY.md](docs/METHODOLOGY.md)** — seeds, observer mapping, Monte Carlo collapse, pattern solidification, BHS gates, evaluation protocols, leakage policy  
+- **[docs/REPRODUCIBILITY.md](docs/REPRODUCIBILITY.md)** — prerequisites, install, 17 tests, API smoke, metric scripts, determinism, one-shot Windows bootstrap  
+
 ---
 
 ## Lineage
