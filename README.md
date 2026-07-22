@@ -6,6 +6,8 @@
 |--|--|
 | **Repo** | [github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns](https://github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns) |
 | **Theory** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
+| **Methodology** | [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md) — full scientific method |
+| **Reproducibility** | [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) — clone → metrics end-to-end |
 | **Free parameters** | **0** (seeds π, e, φ, γ, Catalan + preregistered folds only) |
 | **Author** | Damian Arthur Palumbo |
 
