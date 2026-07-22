@@ -1,0 +1,26 @@
+{
+  "source": "I:\\FSOT-Physical-Archive\\02_FSOT-2.1-Lean-Full\\vendor\\fsot_compute.py",
+  "github_authority": "https://github.com/dappalumbo91/FSOT-2.1-Lean",
+  "formula": "S = K * (T1 + T2 + T3)",
+  "free_parameters": 0,
+  "method": "fsot_intrinsic_zero_free",
+  "domain_economics": {
+    "D_eff": 20,
+    "hits": 3,
+    "delta_psi": 1.5,
+    "observed": true
+  },
+  "domain_finance_markets": {
+    "D_eff": 19,
+    "hits": 2,
+    "delta_psi": 0.75,
+    "observed": true
+  },
+  "domain_factor_economics": 0.0004,
+  "forbidden": [
+    "invented_rsi_volume_coefficients",
+    "per_ticker_D_eff_fit",
+    "S_times_multiplier_plus_base"
+  ],
+  "pinned_at": "2026-07-22T18:00:00+00:00"
+}

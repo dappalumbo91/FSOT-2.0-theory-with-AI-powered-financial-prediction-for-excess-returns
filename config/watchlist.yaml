@@ -1,0 +1,120 @@
+# FSOT Market Monitor — expandable watchlist (edit freely)
+
+indices:
+  - symbol: "^GSPC"
+    name: "S&P 500"
+    class: index
+    yahoo: "^GSPC"
+  - symbol: "SPY"
+    name: "SPDR S&P 500 ETF"
+    class: index
+    yahoo: "SPY"
+  - symbol: "^IXIC"
+    name: "NASDAQ Composite"
+    class: index
+    yahoo: "^IXIC"
+  - symbol: "^DJI"
+    name: "Dow Jones"
+    class: index
+    yahoo: "^DJI"
+
+stocks:
+  - symbol: "AAPL"
+    name: "Apple"
+    class: equity
+    yahoo: "AAPL"
+  - symbol: "MSFT"
+    name: "Microsoft"
+    class: equity
+    yahoo: "MSFT"
+  - symbol: "GOOGL"
+    name: "Alphabet"
+    class: equity
+    yahoo: "GOOGL"
+  - symbol: "AMZN"
+    name: "Amazon"
+    class: equity
+    yahoo: "AMZN"
+  - symbol: "NVDA"
+    name: "NVIDIA"
+    class: equity
+    yahoo: "NVDA"
+  - symbol: "META"
+    name: "Meta"
+    class: equity
+    yahoo: "META"
+  - symbol: "TSLA"
+    name: "Tesla"
+    class: equity
+    yahoo: "TSLA"
+  - symbol: "JPM"
+    name: "JPMorgan"
+    class: equity
+    yahoo: "JPM"
+  - symbol: "JNJ"
+    name: "Johnson & Johnson"
+    class: equity
+    yahoo: "JNJ"
+  - symbol: "XOM"
+    name: "Exxon Mobil"
+    class: equity
+    yahoo: "XOM"
+
+crypto:
+  - symbol: "BTC"
+    name: "Bitcoin"
+    class: crypto
+    coingecko: "bitcoin"
+    binance: "BTC/USDT"
+  - symbol: "ETH"
+    name: "Ethereum"
+    class: crypto
+    coingecko: "ethereum"
+    binance: "ETH/USDT"
+  - symbol: "SOL"
+    name: "Solana"
+    class: crypto
+    coingecko: "solana"
+    binance: "SOL/USDT"
+  - symbol: "BNB"
+    name: "BNB"
+    class: crypto
+    coingecko: "binancecoin"
+    binance: "BNB/USDT"
+  - symbol: "XRP"
+    name: "XRP"
+    class: crypto
+    coingecko: "ripple"
+    binance: "XRP/USDT"
+  - symbol: "ADA"
+    name: "Cardano"
+    class: crypto
+    coingecko: "cardano"
+    binance: "ADA/USDT"
+  - symbol: "DOGE"
+    name: "Dogecoin"
+    class: crypto
+    coingecko: "dogecoin"
+    binance: "DOGE/USDT"
+  - symbol: "AVAX"
+    name: "Avalanche"
+    class: crypto
+    coingecko: "avalanche-2"
+    binance: "AVAX/USDT"
+  - symbol: "LINK"
+    name: "Chainlink"
+    class: crypto
+    coingecko: "chainlink"
+    binance: "LINK/USDT"
+  - symbol: "LTC"
+    name: "Litecoin"
+    class: crypto
+    coingecko: "litecoin"
+    binance: "LTC/USDT"
+
+defaults:
+  range: "1y"
+  interval: "1d"
+  ohlcv_cache_seconds: 300
+  quote_cache_seconds: 60
+  predict_window: 30

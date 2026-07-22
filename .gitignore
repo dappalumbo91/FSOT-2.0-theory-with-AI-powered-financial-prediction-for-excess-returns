@@ -1,0 +1,23 @@
+# Python
+backend/.venv/
+backend/**/__pycache__/
+backend/**/*.pyc
+backend/.pytest_cache/
+*.egg-info/
+backend/scripts/_*.json
+
+# Node
+frontend/node_modules/
+frontend/.next/
+frontend/out/
+
+# Env / OS
+.env
+.env.local
+.DS_Store
+Thumbs.db
+*.log
+
+# Local history dumps (optional external drive data — not in repo)
+# Place large OHLCV under D:\training data\FSOT-Market-History or set FSOT_HISTORY_ROOT
+*.csv.gz
