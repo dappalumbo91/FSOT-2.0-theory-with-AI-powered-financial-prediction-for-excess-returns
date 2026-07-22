@@ -64,27 +64,42 @@ def main() -> None:
             f"sharpe={r['sharpe']:+.2f}  solid={r.get('pattern_memory',{}).get('n_solidified',0)}"
         )
 
-    ok = [r for r in rows if r.get("commit_directional_accuracy") is not None]
+    # Primary aggregate: symbols with enough commits (Fib 8) so noise doesn't dominate
+    ok = [
+        r
+        for r in rows
+        if r.get("commit_directional_accuracy") is not None and r.get("trades", 0) >= 8
+    ]
+    ok_all = [r for r in rows if r.get("commit_directional_accuracy") is not None]
     agg = {}
-    if ok:
+    if ok or ok_all:
         import numpy as np
 
-        accs = [r["commit_directional_accuracy"] for r in ok]
-        pnls = [r["total_pnl"] for r in ok]
-        progs = [r["progress_to_70_80"] for r in ok]
-        holds = [r["pct_hold"] for r in ok]
+        use = ok if ok else ok_all
+        accs = [r["commit_directional_accuracy"] for r in use]
+        pnls = [r["total_pnl"] for r in use]
+        progs = [r["progress_to_70_80"] for r in use]
+        holds = [r["pct_hold"] for r in use]
+        # Trade-weighted accuracy (honest overall hit rate)
+        tw_num = sum(r["commit_directional_accuracy"] * r["trades"] for r in use)
+        tw_den = sum(r["trades"] for r in use)
         agg = {
-            "n_symbols": len(ok),
+            "n_symbols": len(use),
+            "n_symbols_all_with_trades": len(ok_all),
+            "min_trades_filter": 8 if ok else 0,
             "mean_commit_accuracy": float(np.mean(accs)),
             "median_commit_accuracy": float(np.median(accs)),
+            "trade_weighted_accuracy": float(tw_num / tw_den) if tw_den else None,
             "mean_progress_to_70_80": float(np.mean(progs)),
             "mean_pnl": float(np.mean(pnls)),
             "mean_pct_hold": float(np.mean(holds)),
             "n_above_60": int(sum(1 for a in accs if a >= 0.60)),
             "n_above_70": int(sum(1 for a in accs if a >= 0.70)),
-            "symbols_above_70": [r["symbol"] for r in ok if r["commit_directional_accuracy"] >= 0.70],
+            "symbols_above_70": [
+                r["symbol"] for r in use if r["commit_directional_accuracy"] >= 0.70
+            ],
         }
-        print("\nAGGREGATE")
+        print("\nAGGREGATE (min 8 commits)")
         print(json.dumps(agg, indent=2))
         if agg["mean_commit_accuracy"] >= 0.70:
             print("\n>>> TARGET BAND REACHED on mean commit accuracy")

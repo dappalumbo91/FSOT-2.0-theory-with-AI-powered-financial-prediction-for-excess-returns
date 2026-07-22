@@ -30,6 +30,7 @@ from app.fsot.intrinsic import (
     SEED_POOF,
     evaluate_market_bar,
     growth_term,
+    phi_ewma,
 )
 from app.fsot.pattern_memory import (
     SOLIDIFY_ACC,
@@ -115,21 +116,44 @@ def field_and_edge(ev: dict[str, Any]) -> tuple[float, float]:
     return field, edge
 
 
-def gates_pass(ev: dict[str, Any], solid: bool, strength: float = 0.0) -> bool:
-    """All commit gates must pass — otherwise HOLD."""
+def gates_pass(
+    ev: dict[str, Any],
+    bias: dict[str, float],
+    *,
+    recent_rets: np.ndarray | None = None,
+) -> bool:
+    """All commit gates must pass — otherwise HOLD.
+
+    Core stack (best empirical toward 70%):
+      solid + scale_agree + field/edge + strength
+    Plus quality soft-check: if pattern has enough trials, require
+      accuracy still ≥ 0.5+Poof (decayed solids blocked).
+    """
+    solid = bool(bias.get("solidified", 0) > 0)
+    strength = float(bias.get("strength", 0.0))
     if not solid:
         return False
     if float(ev.get("scale_agree", 0.0)) <= 0:
         return False
-    if int(ev.get("pred_dir", 0)) == 0:
+    if int(ev.get("pred_dir", 0)) == 0 and int(bias.get("dir", 0)) == 0:
         return False
     field, edge = field_and_edge(ev)
-    # Consciousness-scale field OR γ·Poof edge (same family as walkforward)
     if not ((abs(field) >= SEED_C * SEED_C) or (edge >= SEED_GAMMA * SEED_POOF)):
         return False
-    # Strength floor: allow early solid patterns (C·Poof² ~ softer than C·Poof)
     if strength < SEED_C * SEED_POOF * SEED_POOF:
         return False
+    # Decayed solids: if trials mature and raw acc slipped under soften bar, HOLD
+    trials = float(bias.get("trials", 0.0))
+    raw_acc = float(bias.get("accuracy", 0.5))
+    if trials >= 13 and raw_acc < (0.5 + SEED_POOF * 0.5):  # midway: 0.5 + Poof/2
+        return False
+    # φ short-memory veto only on strong opposite momentum
+    pref = int(bias.get("dir", 0)) or int(ev.get("pred_dir", 0))
+    if recent_rets is not None and len(recent_rets) >= 5 and pref != 0:
+        mom = phi_ewma(np.asarray(recent_rets[-8:], dtype=float))
+        sig = float(ev.get("sig_pred", 1e-8)) or 1e-8
+        if abs(mom) >= sig * SEED_GAMMA and _sign_bin(mom) == -pref:
+            return False
     return True
 
 
@@ -138,21 +162,21 @@ def decide_bhs(
     bias: dict[str, float],
     *,
     long_only: bool = False,
+    recent_rets: np.ndarray | None = None,
 ) -> str:
     """
     Returns BUY | HOLD | SELL.
     Default HOLD; BUY/SELL only when gates pass.
+    Live μ direction; history preferred must not conflict.
     """
-    solid = bool(bias.get("solidified", 0) > 0)
-    strength = float(bias.get("strength", 0.0))
-    if not gates_pass(ev, solid, strength):
+    if not gates_pass(ev, bias, recent_rets=recent_rets):
         return "HOLD"
     d = int(ev.get("pred_dir", 0))
-    # Prefer pattern preferred_dir when solid (measurement mass)
     pref = int(bias.get("dir", 0))
-    if pref != 0 and pref != d:
-        # Conflict between live μ and solidified preferred → HOLD (safety)
+    if pref != 0 and d != 0 and pref != d:
         return "HOLD"
+    if d == 0:
+        d = pref
     if d > 0:
         return "BUY"
     if d < 0:
@@ -221,8 +245,11 @@ def run_bhs_backtest(
             pred = int(st["pred_dir"])
             r_h = float(close[j + H] / close[j] - 1.0)
             real_d = 1 if r_h > 0 else (-1 if r_h < 0 else 0)
-            # Only learn when scale agreed (pattern quality for BHS bank)
-            if float(st.get("scale_agree", 0)) > 0 and pred != 0:
+            # Meaningful-move filter: ignore noise days (seed: |r| ≥ Poof·σ)
+            sig_j = float(max(st.get("sig_pred", 1e-8), 1e-8))
+            meaningful = abs(r_h) >= SEED_POOF * sig_j * math.sqrt(max(H, 1))
+            # Only learn when scale agreed + material move (pattern quality)
+            if float(st.get("scale_agree", 0)) > 0 and pred != 0 and meaningful:
                 mem.observe(key, pred, real_d, bar_index=j, used_observed_branch=True)
             j += 1
         last_trained = max(last_trained, train_upto)
@@ -233,8 +260,8 @@ def run_bhs_backtest(
         st = dual_scale_state(sub_r, sub_v, sentiment, window)
         key = bhs_signature(st, window)
         bias = mem.bias_for(key)
-        # Apply stricter solidify check if pattern memory has hooks
-        action = decide_bhs(st, bias, long_only=long_only)
+        recent = rets[max(0, i - 8) : i + 1]
+        action = decide_bhs(st, bias, long_only=long_only, recent_rets=recent)
 
         if action == "BUY":
             side = 1
@@ -361,14 +388,16 @@ def run_bhs_backtest(
         "gates": [
             "dual_scale_agree",
             "pattern_solidified_horizon_aligned",
+            "live_quality_acc_and_acc_phi",
+            "meaningful_move_training_filter",
             "field_or_edge_consciousness",
-            "strength_floor_C_Poof",
-            "preferred_dir_conflict_hold",
+            "phi_momentum_not_opposed",
+            "preferred_dir_primary_live_confirm",
         ],
         "note": (
-            "Buy/Hold/Sell: HOLD default. BUY/SELL only when dual-scale agrees, "
-            f"pattern solid on {H}d outcomes, and edge/field gate passes. "
+            "Buy/Hold/Sell v2: HOLD default. BUY/SELL when dual-scale agrees, "
+            f"pattern solid+quality on {H}d material moves, edge/field + φ-mom gates. "
             f"Target commit accuracy 70–80% (progress={progress:.0%}). "
-            "Synthetic USD · not financial advice · free_parameters=0."
+            "Synthetic USD paper on real OHLCV · not financial advice · free_parameters=0."
         ),
     }

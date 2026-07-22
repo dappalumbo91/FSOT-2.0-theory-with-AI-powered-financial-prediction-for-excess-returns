@@ -267,6 +267,7 @@ class PatternMemory:
         All derived from solidified accuracy + seeds.
         """
         rec = self.get(key)
+        raw_acc = rec.accuracy()
         if not rec.solidified or rec.strength <= 0:
             return {
                 "solidified": 0.0,
@@ -276,7 +277,9 @@ class PatternMemory:
                 "collapse_boost": 0.0,
                 "path_weight": 1.0,
                 "acc_phi": rec.acc_phi,
+                "accuracy": raw_acc,
                 "trials": float(rec.trials),
+                "quality": 0.0,
             }
         # Collapse toward observed True when that branch was historically accurate
         p_obs = rec.preferred_collapse_true()
@@ -284,6 +287,10 @@ class PatternMemory:
         # Amplify |μ| when pattern strong; direction lock via preferred_dir
         mu_scale = 1.0 + rec.strength * SEED_PHI * SEED_C
         path_weight = 1.0 + rec.strength / SEED_PHI
+        # Live quality: both φ-EWMA and raw hit-rate still clear solidify bar
+        quality = 1.0 if (
+            rec.acc_phi >= SOLIDIFY_ACC and raw_acc >= SOLIDIFY_ACC
+        ) else 0.0
         return {
             "solidified": 1.0,
             "strength": rec.strength,
@@ -292,7 +299,9 @@ class PatternMemory:
             "collapse_boost": float(collapse_boost),
             "path_weight": float(path_weight),
             "acc_phi": rec.acc_phi,
+            "accuracy": raw_acc,
             "trials": float(rec.trials),
+            "quality": quality,
         }
 
     def summary(self) -> dict[str, Any]:
