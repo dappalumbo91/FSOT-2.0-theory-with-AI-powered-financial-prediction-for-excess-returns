@@ -154,22 +154,25 @@ Theoretical money on **real OHLCV** — adjust starting capital to see P&amp;L a
 | Query | Default | Meaning |
 |-------|---------|---------|
 | `capital` | `10000` | Starting synthetic USD (100 … 1e8) |
-| `mode` | `solid_gated` | `always_in` · `solid_gated` · `long_only` · `buy_hold` |
+| `mode` | `bhs` | `bhs` · `bhs_long_only` · `always_in` · `solid_gated` · `buy_hold` |
+| `hold_horizon` | `5` | Fib hold days (BHS; learn & trade aligned) |
 | `range` | `2y` | History window |
 
 ```
-GET /api/paper/SPY?capital=25000&mode=solid_gated&range=2y
+GET /api/paper/SPY?capital=25000&mode=bhs&range=2y
 ```
 
-Dashboard: **Synthetic $ Portfolio** panel — capital presets, mode toggle, equity curve, ending equity, total P&amp;L $, max DD $, vs buy&hold.
+Dashboard: **Buy / Hold / Sell · Synthetic $** — capital presets, mode toggle, equity curve, **commit accuracy**, progress toward 70–80%.
 
 Modes:
-- **solid_gated** — only trade when FSOT pattern memory has solidified (intelligence gate)
+- **bhs** (recommended) — BUY/HOLD/SELL; HOLD default; multi-gate commit (dual-scale + solid pattern + edge)
+- **bhs_long_only** — same but never short
+- **solid_gated** — 1d solid-pattern gate (legacy)
 - **always_in** — every non-flat FSOT μ signal
-- **long_only** — solid longs only
-- **buy_hold** — benchmark
+- **buy_hold** — 100% long benchmark
 
-Sizing: Kelly \(f^*=1/e\) × edge \(|\mu|/\sigma\), strength boost when solid. Causal (no lookahead).
+Sizing: Kelly \(f^*=1/e\) × edge \(|\mu|/\sigma\). Causal (no lookahead).  
+Eval: `python scripts/eval_bhs_target.py` → report under history `verification/bhs_target_eval.json`.
 
 ---
 

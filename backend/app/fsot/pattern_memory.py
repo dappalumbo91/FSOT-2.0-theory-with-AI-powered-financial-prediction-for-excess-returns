@@ -33,7 +33,8 @@ from app.fsot.intrinsic import (
 )
 
 # Fib solidification horizon (preregistered ladder, not free)
-_MIN_TRIALS = 8  # Fib
+_MIN_TRIALS = 8  # Fib — base; BHS may raise to 13 via instance
+_MIN_TRIALS_STRICT = 13  # Fib — quality solidify for Buy/Hold/Sell
 _CONFIRM_WINDOW = 13  # Fib — recent window for re-check
 # Accuracy bar: coin-flip + Poof residual (must clear decoherence shell)
 SOLIDIFY_ACC = 0.5 + SEED_POOF  # ≈ 0.653
@@ -108,7 +109,7 @@ class PatternMemory:
     Online causal ledger of FSOT signatures → accuracy → solidification.
     """
 
-    def __init__(self, symbol: str = "") -> None:
+    def __init__(self, symbol: str = "", *, strict: bool = False) -> None:
         self.symbol = symbol
         self.patterns: dict[str, PatternRecord] = {}
         self.n_updates = 0
@@ -116,6 +117,18 @@ class PatternMemory:
         self.n_soften_events = 0
         self.rolling_hits: list[float] = []  # global post-solidify refinement curve
         self.free_parameters = 0
+        # strict=True → BHS quality: Fib(13) trials + raw accuracy gate
+        # Use Fib(8) floor even in strict so enough solids form on shorter series
+        self.min_trials = _MIN_TRIALS_STRICT if strict else _MIN_TRIALS
+        if strict:
+            # Hybrid: solidify at Fib(8) if acc exceptional (≥ 0.5+φ·Poof), else Fib(13)
+            self.min_trials = _MIN_TRIALS
+            self.min_trials_full = _MIN_TRIALS_STRICT
+        else:
+            self.min_trials_full = _MIN_TRIALS
+        self.require_raw_acc = bool(strict)
+        self.soft_fail_limit = 2 if strict else 3
+        self.strict = bool(strict)
 
     # ── Signature (FSOT discrete state) ─────────────────────────────────
 
@@ -220,15 +233,27 @@ class PatternMemory:
         rec.strength = float(np.clip(SEED_C * margin / denom, 0.0, 1.0))
 
         # Solidify / soften (seed gates only)
-        if (
-            not rec.solidified
-            and rec.trials >= _MIN_TRIALS
+        raw_ok = (not self.require_raw_acc) or (rec.accuracy() >= SOLIDIFY_ACC)
+        # Exceptional early solidify: acc_φ ≥ 0.5 + φ·Poof (~0.75) after Fib(8)
+        exceptional = rec.acc_phi >= (0.5 + SEED_PHI * SEED_POOF) and rec.trials >= self.min_trials
+        full_ready = rec.trials >= getattr(self, "min_trials_full", self.min_trials)
+        can_solid = (
+            (exceptional or full_ready)
             and rec.acc_phi >= SOLIDIFY_ACC
+            and raw_ok
             and rec.preferred_dir != 0
-        ):
+        )
+        if not rec.solidified and can_solid:
             rec.solidified = True
             self.n_solidify_events += 1
-        elif rec.solidified and rec.acc_phi < SOFTEN_ACC and rec.soft_fails >= 3:
+        elif rec.solidified and (
+            (rec.acc_phi < SOFTEN_ACC and rec.soft_fails >= self.soft_fail_limit)
+            or (
+                self.require_raw_acc
+                and rec.trials >= self.min_trials
+                and rec.accuracy() < SOFTEN_ACC
+            )
+        ):
             # decoherence: pattern loses lock
             rec.solidified = False
             rec.strength *= SEED_POOF

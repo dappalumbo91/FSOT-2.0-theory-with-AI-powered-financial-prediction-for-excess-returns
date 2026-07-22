@@ -44,3 +44,15 @@ def test_paper_modes():
         assert r["capital_start"] == 5000
         assert r["capital_end"] > 0
         assert len(r["equity_curve"]) >= 2
+
+
+def test_bhs_mode():
+    df = _df(n=400, seed=3)
+    r = run_paper_portfolio(df, capital=10_000, mode="bhs", symbol="T")
+    assert r.get("error") is None
+    assert r["method"] == "fsot_bhs_buy_hold_sell"
+    assert r["free_parameters"] == 0
+    assert "commit_directional_accuracy" in r
+    assert "progress_to_70_80" in r
+    assert r["mode"] == "bhs"
+

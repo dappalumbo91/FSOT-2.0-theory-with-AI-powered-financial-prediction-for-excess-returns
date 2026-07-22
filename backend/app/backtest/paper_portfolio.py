@@ -1,10 +1,12 @@
 """
 Synthetic dollar paper portfolio — theoretical P&L on real OHLCV.
 
-Adjustable starting capital. Causal walk: signal at close_t applied to return t→t+1.
+Adjustable starting capital. Causal walk on real prices.
 Modes:
+  bhs           — Buy/Hold/Sell engine (recommended): multi-gate, Fib hold
+  bhs_long_only — BHS but never short
   always_in     — trade every FSOT non-FLAT signal (raw engine)
-  solid_gated   — only commit when pattern memory has solidified the signature
+  solid_gated   — only commit when pattern memory solidified (1d)
   long_only     — solid_gated but never short
   buy_hold      — 100% long benchmark
 
@@ -20,6 +22,7 @@ from typing import Any
 import numpy as np
 import pandas as pd
 
+from app.fsot.bhs_engine import HOLD_HORIZON, run_bhs_backtest
 from app.fsot.intrinsic import (
     KELLY_F,
     SEED_C,
@@ -63,26 +66,62 @@ def run_paper_portfolio(
     *,
     capital: float = 10_000.0,
     window: int = 21,
-    mode: str = "solid_gated",
+    mode: str = "bhs",
     symbol: str = "",
     sentiment: float = 0.0,
     step: int = 1,
     store_curve: bool = True,
     curve_max_points: int = 400,
+    hold_horizon: int = HOLD_HORIZON,
 ) -> dict[str, Any]:
     """
     Simulate synthetic USD equity path from FSOT signals on real prices.
 
     capital: starting paper dollars (user-adjustable)
-    mode: always_in | solid_gated | long_only | buy_hold
+    mode: bhs | bhs_long_only | always_in | solid_gated | long_only | buy_hold
     """
     if df is None or len(df) < window + 30:
         return {"error": "insufficient_data"}
 
     capital0 = float(max(capital, 1.0))
-    mode = (mode or "solid_gated").lower().strip()
+    mode = (mode or "bhs").lower().strip()
+    if mode in ("bhs", "buy_hold_sell", "bhs_mc"):
+        return run_bhs_backtest(
+            df,
+            capital=capital0,
+            window=window,
+            hold_horizon=hold_horizon,
+            symbol=symbol,
+            sentiment=sentiment,
+            long_only=False,
+            store_curve=store_curve,
+            curve_max_points=curve_max_points,
+        )
+    if mode in ("bhs_long_only", "bhs_long"):
+        return run_bhs_backtest(
+            df,
+            capital=capital0,
+            window=window,
+            hold_horizon=hold_horizon,
+            symbol=symbol,
+            sentiment=sentiment,
+            long_only=True,
+            store_curve=store_curve,
+            curve_max_points=curve_max_points,
+        )
     if mode not in ("always_in", "solid_gated", "long_only", "buy_hold"):
-        mode = "solid_gated"
+        mode = "bhs"
+        return run_bhs_backtest(
+            df,
+            capital=capital0,
+            window=window,
+            hold_horizon=hold_horizon,
+            symbol=symbol,
+            sentiment=sentiment,
+            long_only=False,
+            store_curve=store_curve,
+            curve_max_points=curve_max_points,
+        )
 
     close = df["close"].astype(float).values
     rets = pd.Series(close).pct_change().fillna(0.0).values

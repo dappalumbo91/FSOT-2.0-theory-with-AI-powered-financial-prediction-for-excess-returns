@@ -319,7 +319,14 @@ export type PaperPortfolioResult = {
   n_short_bars: number;
   n_flat_bars: number;
   pct_time_in_market: number;
-  equity_curve: { t: string; equity: number; position: number }[];
+  commit_directional_accuracy?: number | null;
+  progress_to_70_80?: number | null;
+  pct_hold?: number | null;
+  hold_horizon?: number;
+  n_buy?: number;
+  n_sell?: number;
+  n_hold?: number;
+  equity_curve: { t: string; equity: number; position: number; action?: string }[];
   note?: string;
 };
 

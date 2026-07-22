@@ -12,9 +12,9 @@ const PRESETS = [1_000, 5_000, 10_000, 25_000, 50_000, 100_000];
 
 export default function PaperPortfolio({ symbol, range = "2y" }: Props) {
   const [capital, setCapital] = useState(10_000);
-  const [mode, setMode] = useState<"solid_gated" | "always_in" | "long_only" | "buy_hold">(
-    "solid_gated"
-  );
+  const [mode, setMode] = useState<
+    "bhs" | "bhs_long_only" | "solid_gated" | "always_in" | "long_only" | "buy_hold"
+  >("bhs");
   const [data, setData] = useState<PaperPortfolioResult | null>(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState<string | null>(null);
@@ -46,9 +46,9 @@ export default function PaperPortfolio({ symbol, range = "2y" }: Props) {
     <div className="rounded-xl border border-border bg-panel overflow-hidden">
       <div className="px-4 py-3 border-b border-border flex flex-wrap items-center justify-between gap-2">
         <div>
-          <h3 className="font-semibold text-fsot">Synthetic $ Portfolio</h3>
+          <h3 className="font-semibold text-fsot">Buy / Hold / Sell · Synthetic $</h3>
           <p className="text-[11px] text-muted">
-            Paper trading on real {symbol} history · theoretical P&amp;L before live capital
+            HOLD default · commit only when FSOT gates lock · real {symbol} history
           </p>
         </div>
         <button
@@ -95,9 +95,10 @@ export default function PaperPortfolio({ symbol, range = "2y" }: Props) {
           <div className="flex flex-wrap gap-1 mt-1">
             {(
               [
-                ["solid_gated", "Solid gate"],
+                ["bhs", "BHS (rec.)"],
+                ["bhs_long_only", "BHS long"],
+                ["solid_gated", "Solid 1d"],
                 ["always_in", "Always in"],
-                ["long_only", "Long only"],
                 ["buy_hold", "Buy & hold"],
               ] as const
             ).map(([m, label]) => (
@@ -156,6 +157,24 @@ export default function PaperPortfolio({ symbol, range = "2y" }: Props) {
                   data.win_rate != null ? `${(data.win_rate * 100).toFixed(1)}%` : "—"
                 }
               />
+              {data.commit_directional_accuracy != null && (
+                <Stat
+                  label="Commit accuracy"
+                  value={`${(data.commit_directional_accuracy * 100).toFixed(1)}%`}
+                  tone={data.commit_directional_accuracy - 0.5}
+                  accent
+                />
+              )}
+              {data.progress_to_70_80 != null && (
+                <Stat
+                  label="Progress → 70–80%"
+                  value={`${(data.progress_to_70_80 * 100).toFixed(0)}%`}
+                  accent
+                />
+              )}
+              {data.pct_hold != null && (
+                <Stat label="% HOLD (cash)" value={`${(data.pct_hold * 100).toFixed(0)}%`} />
+              )}
             </div>
 
             {curve.length > 2 && (
