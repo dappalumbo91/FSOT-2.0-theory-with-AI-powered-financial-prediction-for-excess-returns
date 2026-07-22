@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   api,
   type Backtest,
@@ -22,6 +22,26 @@ import ForwardMonitor from "./ForwardMonitor";
 
 type Tab = "all" | "indices" | "stocks" | "crypto";
 
+/** Common polling cadences for research dashboards (not HFT). */
+const AUTO_OPTIONS: { sec: number; label: string; hint: string }[] = [
+  { sec: 0, label: "Off", hint: "Manual only" },
+  { sec: 30, label: "30s", hint: "Quotes / crypto feel" },
+  { sec: 60, label: "1m", hint: "Typical monitor default" },
+  { sec: 120, label: "2m", hint: "Light load" },
+  { sec: 300, label: "5m", hint: "Casual / daily bars" },
+  { sec: 900, label: "15m", hint: "Background watch" },
+];
+
+const LS_KEY = "fsot_auto_refresh_sec";
+
+function readAutoSec(): number {
+  if (typeof window === "undefined") return 60;
+  const v = localStorage.getItem(LS_KEY);
+  if (v == null) return 60; // industry-ish default for dashboards
+  const n = Number(v);
+  return AUTO_OPTIONS.some((o) => o.sec === n) ? n : 60;
+}
+
 export default function Dashboard() {
   const [symbol, setSymbol] = useState("SPY");
   const [tab, setTab] = useState<Tab>("all");
@@ -40,6 +60,17 @@ export default function Dashboard() {
   const [mcError, setMcError] = useState<string | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [clock, setClock] = useState("");
+  const [autoSec, setAutoSec] = useState(60);
+  const [lastRefresh, setLastRefresh] = useState<Date | null>(null);
+  const [secondsLeft, setSecondsLeft] = useState<number | null>(null);
+  const [refreshNonce, setRefreshNonce] = useState(0);
+  const [tabVisible, setTabVisible] = useState(true);
+  const heavyTick = useRef(0);
+  const refreshing = useRef(false);
+
+  useEffect(() => {
+    setAutoSec(readAutoSec());
+  }, []);
 
   useEffect(() => {
     const tick = () => setClock(new Date().toLocaleString());
@@ -48,12 +79,20 @@ export default function Dashboard() {
     return () => clearInterval(id);
   }, []);
 
+  // Pause polling when browser tab is hidden (saves API quota)
+  useEffect(() => {
+    const onVis = () => setTabVisible(document.visibilityState === "visible");
+    onVis();
+    document.addEventListener("visibilitychange", onVis);
+    return () => document.removeEventListener("visibilitychange", onVis);
+  }, []);
+
   useEffect(() => {
     api.health().then(setHealth).catch(() => setHealth(null));
   }, []);
 
-  const loadBatch = useCallback(async () => {
-    setLoadingBatch(true);
+  const loadBatch = useCallback(async (silent = false) => {
+    if (!silent) setLoadingBatch(true);
     try {
       const section = tab === "all" ? undefined : tab;
       const res = await api.batch(section);
@@ -61,17 +100,19 @@ export default function Dashboard() {
     } catch (e) {
       console.error(e);
     } finally {
-      setLoadingBatch(false);
+      if (!silent) setLoadingBatch(false);
     }
   }, [tab]);
 
   useEffect(() => {
-    loadBatch();
+    loadBatch(false);
   }, [loadBatch]);
 
   const loadSymbol = useCallback(
-    async (sym: string) => {
-      setLoadingMain(true);
+    async (sym: string, opts?: { silent?: boolean; heavy?: boolean }) => {
+      const silent = opts?.silent ?? false;
+      const heavy = opts?.heavy ?? true;
+      if (!silent) setLoadingMain(true);
       setError(null);
       try {
         const [ohlcv, pred] = await Promise.all([
@@ -84,20 +125,22 @@ export default function Dashboard() {
       } catch (e) {
         setError(e instanceof Error ? e.message : String(e));
       } finally {
-        setLoadingMain(false);
+        if (!silent) setLoadingMain(false);
       }
 
-      setLoadingBt(true);
+      if (!heavy) return;
+
+      if (!silent) setLoadingBt(true);
       try {
         const bt = await api.backtest(sym, range === "1y" ? "2y" : range);
         setBacktest(bt.backtest);
       } catch {
         setBacktest(null);
       } finally {
-        setLoadingBt(false);
+        if (!silent) setLoadingBt(false);
       }
 
-      setLoadingMc(true);
+      if (!silent) setLoadingMc(true);
       setMcError(null);
       try {
         const mcRes = await api.monteCarlo(sym, {
@@ -110,15 +153,78 @@ export default function Dashboard() {
         setMonteCarlo(null);
         setMcError(e instanceof Error ? e.message : String(e));
       } finally {
-        setLoadingMc(false);
+        if (!silent) setLoadingMc(false);
       }
     },
     [range]
   );
 
   useEffect(() => {
-    loadSymbol(symbol);
+    loadSymbol(symbol, { silent: false, heavy: true });
   }, [symbol, loadSymbol]);
+
+  const runAutoRefresh = useCallback(async () => {
+    if (refreshing.current || document.visibilityState !== "visible") return;
+    refreshing.current = true;
+    try {
+      heavyTick.current += 1;
+      // Every 3rd poll: full heavy (MC + backtest); else quotes + signals + batch
+      const heavy = heavyTick.current % 3 === 0;
+      await Promise.all([
+        loadBatch(true),
+        loadSymbol(symbol, { silent: true, heavy }),
+        api.health().then(setHealth).catch(() => setHealth(null)),
+      ]);
+      if (heavy) setRefreshNonce((n) => n + 1);
+      setLastRefresh(new Date());
+      setSecondsLeft(autoSec > 0 ? autoSec : null);
+    } finally {
+      refreshing.current = false;
+    }
+  }, [autoSec, loadBatch, loadSymbol, symbol]);
+
+  // Auto-refresh interval
+  useEffect(() => {
+    if (autoSec <= 0 || !tabVisible) {
+      setSecondsLeft(null);
+      return;
+    }
+    setSecondsLeft(autoSec);
+    const countdown = setInterval(() => {
+      setSecondsLeft((s) => {
+        if (s == null) return autoSec;
+        if (s <= 1) return autoSec;
+        return s - 1;
+      });
+    }, 1000);
+    const poll = setInterval(() => {
+      void runAutoRefresh();
+    }, autoSec * 1000);
+    return () => {
+      clearInterval(countdown);
+      clearInterval(poll);
+    };
+  }, [autoSec, tabVisible, runAutoRefresh]);
+
+  const setAuto = (sec: number) => {
+    setAutoSec(sec);
+    try {
+      localStorage.setItem(LS_KEY, String(sec));
+    } catch {
+      /* ignore */
+    }
+    setSecondsLeft(sec > 0 ? sec : null);
+  };
+
+  const manualRefresh = () => {
+    heavyTick.current = 0;
+    void loadBatch(false);
+    void loadSymbol(symbol, { silent: false, heavy: true });
+    void api.health().then(setHealth).catch(() => setHealth(null));
+    setRefreshNonce((n) => n + 1);
+    setLastRefresh(new Date());
+    if (autoSec > 0) setSecondsLeft(autoSec);
+  };
 
   const filteredBatch = useMemo(() => {
     if (tab === "all") return batch;
@@ -164,17 +270,62 @@ export default function Dashboard() {
               </span>
             </div>
             <span className="text-xs text-muted font-mono hidden sm:inline">{clock}</span>
+
+            {/* Auto-refresh */}
+            <div className="flex items-center gap-1.5">
+              <span className="text-[10px] uppercase tracking-wider text-muted hidden md:inline">
+                Auto
+              </span>
+              <div className="flex rounded-lg border border-border bg-panel2 p-0.5">
+                {AUTO_OPTIONS.map((o) => (
+                  <button
+                    key={o.sec}
+                    title={o.hint}
+                    onClick={() => setAuto(o.sec)}
+                    className={`px-1.5 sm:px-2 py-1 text-[10px] sm:text-xs rounded-md font-mono transition ${
+                      autoSec === o.sec
+                        ? "bg-fsot/20 text-fsot font-semibold"
+                        : "text-muted hover:text-slate-200"
+                    }`}
+                  >
+                    {o.label}
+                  </button>
+                ))}
+              </div>
+              {autoSec > 0 && tabVisible && secondsLeft != null && (
+                <span className="text-[10px] font-mono text-muted tabular-nums w-8">
+                  {secondsLeft}s
+                </span>
+              )}
+              {autoSec > 0 && !tabVisible && (
+                <span className="text-[10px] text-muted">paused</span>
+              )}
+            </div>
+
             <button
-              onClick={() => {
-                loadBatch();
-                loadSymbol(symbol);
-              }}
+              onClick={manualRefresh}
               className="px-3 py-1.5 rounded-lg border border-border bg-panel2 hover:bg-panel text-xs font-medium transition"
             >
               Refresh
             </button>
           </div>
         </div>
+        {(autoSec > 0 || lastRefresh) && (
+          <div className="max-w-[1600px] mx-auto px-4 pb-2 text-[10px] text-muted font-mono flex flex-wrap gap-x-4 gap-y-0.5">
+            <span>
+              Polling:{" "}
+              {autoSec <= 0
+                ? "manual"
+                : `${autoSec}s · quotes/signals every tick · MC/backtest every 3rd`}
+            </span>
+            {lastRefresh && (
+              <span>Last update {lastRefresh.toLocaleTimeString()}</span>
+            )}
+            <span className="text-muted/70">
+              Typical: 15–30s quotes · 1–5m dashboards · daily bar models at close
+            </span>
+          </div>
+        )}
       </header>
 
       <main className="max-w-[1600px] mx-auto px-4 py-4 grid grid-cols-1 lg:grid-cols-12 gap-4">
@@ -280,8 +431,12 @@ export default function Dashboard() {
           )}
 
           <BacktestCard data={backtest} loading={loadingBt} symbol={symbol} />
-          <PaperPortfolio symbol={symbol} range={range === "3mo" || range === "6mo" ? "1y" : range === "1y" ? "2y" : range} />
-          <ForwardMonitor symbol={symbol} />
+          <PaperPortfolio
+            symbol={symbol}
+            range={range === "3mo" || range === "6mo" ? "1y" : range === "1y" ? "2y" : range}
+            refreshKey={refreshNonce}
+          />
+          <ForwardMonitor symbol={symbol} refreshKey={refreshNonce} />
         </section>
 
         {/* Right FSOT */}

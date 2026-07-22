@@ -1,18 +1,210 @@
 # FSOT Market Monitor
 
-**Full-stack financial monitoring, intelligent Monte Carlo, and synthetic-$ paper trading** powered by **Fluid Spacetime Omni-Theory (FSOT 2.1)**.
+**Full-stack financial monitoring, intelligent Monte Carlo, Buy/Hold/Sell paper trading, and forward prediction journals** powered by **Fluid Spacetime Omni-Theory (FSOT 2.1)**.
 
-> Successor app for the original finance experiments in this repository lineage:  
-> [FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns](https://github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns)
+| | |
+|--|--|
+| **Repo** | [github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns](https://github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns) |
+| **Theory** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
+| **Free parameters** | **0** (seeds π, e, φ, γ, Catalan + preregistered folds only) |
+| **Author** | Damian Arthur Palumbo |
 
-Monitors **S&P 500 / indices, equities, and multi-crypto**, maps market features onto the canonical FSOT scalar engine (zero free parameters), runs **dynamic Monte Carlo with pattern solidification**, and simulates **theoretical P&amp;L in adjustable USD** on real market history before live capital.
+Monitors **indices, equities, and multi-crypto** on **real market data** (Yahoo / CoinGecko), with **synthetic USD** paper P&amp;L so you can evaluate the model **before** real capital. Robinhood crypto API is **wired in dry-run** only (live trading off by default).
 
 | Layer | Stack |
 |-------|--------|
-| Backend | FastAPI · Python · yfinance · CoinGecko |
-| FSOT math | Pinned from `I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full\vendor\fsot_compute.py` (or vendored pin) |
-| Frontend | Next.js 14 · Tailwind · TradingView Lightweight Charts |
-| Paper $ | Causal walk · Kelly `1/e` sizing · solid-gated commits |
+| Backend | FastAPI · Python 3.11+ · yfinance · CoinGecko · httpx |
+| FSOT math | `backend/app/fsot/` (pinned seeds + domain folds) |
+| Frontend | Next.js 14 · React 18 · Tailwind · Lightweight Charts |
+| Paper $ | BHS multi-gate · Kelly \(f^*=1/e\) · adjustable capital |
+| Broker | Robinhood Crypto adapter · **dry-run default** |
+
+---
+
+## Current research metrics (honest)
+
+These are **causal historical** evaluations (not live guarantees). Target band for selective commits: **70–80%**. Overall markets remain near Hurst ≈ 0.5; the edge is in **when to commit** (HOLD is the default).
+
+### Buy / Hold / Sell (`mode=bhs`, $10k paper, ~2–10y bars, hold=5d)
+
+| Symbol | Commit accuracy | Paper P&amp;L | Trades | % HOLD | Notes |
+|--------|-----------------|--------------|--------|--------|--------|
+| **IWM** | **~80%** | ~+$200 | ~10 | ~98% | In 70–80% band |
+| **MSFT** | **~68%** | ~+$590 | ~38 | ~92% | Near 70% |
+| NVDA | ~62% | mixed | ~21 | ~96% | High B&amp;H baseline |
+| BTC | ~61% | ~+$640 | ~18 | ~96% | Crypto path |
+| AAPL | ~60% | ~+$1.1k | ~78 | ~84% | More trades |
+| SPY | ~60% | ~+$180 | ~57 | ~88% | Index |
+| QQQ | ~54% | mixed | ~37 | ~92% | Weaker |
+| **Mean (min 8 commits)** | **~63–64%** | **positive mean P&amp;L** | — | **~92%+ cash** | Gap to 70% ≈ **6 pts** |
+
+```powershell
+cd backend
+.\.venv\Scripts\python scripts\eval_bhs_target.py
+# → D:\training data\FSOT-Market-History\verification\bhs_target_eval.json
+```
+
+### Monte Carlo intelligence (pattern solidify + observer collapse)
+
+| Metric | Typical range (research runs) |
+|--------|-------------------------------|
+| Solidify threshold | `0.5 + Poof` ≈ **0.653** |
+| Consciousness \(C\) | ≈ **0.288** |
+| Patterns solidified per multi-year train | often **10–20+** per liquid ticker |
+| Gated / confident subset accuracy | can exceed raw always-in (~50%) |
+| Always-in raw directional | ≈ **50%** (expected) |
+
+```powershell
+.\.venv\Scripts\python scripts\smoke_dynamic_mc.py
+.\.venv\Scripts\python scripts\eval_longterm_mc_intelligence.py --quick
+```
+
+### Design target
+
+| Goal | Status |
+|------|--------|
+| Zero free parameters | Met |
+| Synthetic $ before live | Met |
+| Commit accuracy 70–80% (selective) | **In progress** — IWM in band; mean ~64% |
+| Forward (true future) journal | Wired — fill via UI/API over time |
+| Live broker | Dry-run only until you opt in |
+
+---
+
+## Requirements
+
+### System
+
+- **Windows / macOS / Linux**
+- **Python 3.11+**
+- **Node.js 18+** (frontend)
+- Optional: long history on `D:\training data\FSOT-Market-History` (or any path after download)
+
+### Backend (`backend/requirements.txt`)
+
+```
+fastapi>=0.115.0
+uvicorn[standard]>=0.32.0
+pydantic>=2.9.0
+pydantic-settings>=2.6.0
+mpmath>=1.3.0
+numpy>=1.26.0
+pandas>=2.2.0
+yfinance>=0.2.40
+requests>=2.32.0
+pyyaml>=6.0.2
+httpx>=0.27.0
+python-multipart>=0.0.12
+pytest>=8.3.0
+pytest-asyncio>=0.24.0
+cryptography>=43.0.0
+```
+
+### Frontend (`frontend/package.json`)
+
+- next ^14 · react ^18 · tailwindcss · lightweight-charts · typescript
+
+---
+
+## How to use
+
+### 1. Clone & backend
+
+```powershell
+git clone https://github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns.git
+cd FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns
+
+cd backend
+python -m venv .venv
+.\.venv\Scripts\Activate.ps1          # Windows
+# source .venv/bin/activate           # macOS/Linux
+pip install -r requirements.txt
+python -m pytest tests/ -q
+python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
+```
+
+- API docs: http://127.0.0.1:8000/docs  
+- Health: http://127.0.0.1:8000/api/health  
+
+Or: `.\start-backend.ps1` from repo root.
+
+### 2. Frontend
+
+```powershell
+cd frontend
+npm install
+npm run dev
+```
+
+Open **http://localhost:3000**  
+Optional: `NEXT_PUBLIC_API_URL=http://127.0.0.1:8000`
+
+Or: `.\start-frontend.ps1`
+
+### 3. Dashboard workflow
+
+1. Pick **indices / stocks / crypto** in the left watchlist.  
+2. Read **price chart**, **FSOT signal**, **Monte Carlo** (right).  
+3. **Synthetic $** panel: set capital ($1k–$100k+), mode **BHS (rec.)**, compare P&amp;L vs buy&amp;hold.  
+4. **Forward journal**: **Record** a forecast today → **Resolve** after the horizon (true future test).  
+5. **Auto** poll: Off / 30s / **1m** (default) / 2m / 5m / 15m — pauses when the tab is hidden.  
+6. Broker strip shows **dry_run=true** (no real money).
+
+### 4. Useful API calls
+
+```http
+GET  /api/health
+GET  /api/predict/BTC?range=1y
+GET  /api/predict/BTC/montecarlo?horizon=21&n_paths=256&dynamic=true
+GET  /api/paper/BTC?capital=10000&mode=bhs&range=2y
+GET  /api/broker/status
+POST /api/broker/preview
+POST /api/monitor/forward/record?symbol=BTC&horizon=5
+POST /api/monitor/forward/resolve
+GET  /api/monitor/forward
+```
+
+### 5. Research scripts
+
+```powershell
+cd backend
+.\.venv\Scripts\python scripts\verify_fsot_pin.py
+.\.venv\Scripts\python scripts\smoke_intrinsic.py
+.\.venv\Scripts\python scripts\smoke_dynamic_mc.py
+.\.venv\Scripts\python scripts\eval_bhs_target.py
+.\.venv\Scripts\python scripts\eval_longterm_mc_intelligence.py --quick
+```
+
+### 6. Optional history download
+
+```powershell
+.\.venv\Scripts\python scripts\download_history.py
+```
+
+Default archive layout:
+
+```
+D:\training data\FSOT-Market-History\
+  ohlcv\          # daily bars
+  patterns\       # MC pattern ledgers
+  verification\   # eval JSON outputs
+  monitor\        # forward journal
+```
+
+### 7. Robinhood crypto (later only)
+
+```powershell
+# copy backend/.env.example → backend/.env  (never commit secrets)
+# FSOT_RH_API_KEY=...
+# FSOT_RH_PRIVATE_KEY_PATH=...
+
+# Live trading requires ALL THREE (default: dry-run forever):
+# FSOT_BROKER_LIVE=1
+# FSOT_BROKER_I_UNDERSTAND=YES
+# FSOT_BROKER_DRY_RUN=0
+```
+
+Credentials: [robinhood.com/account/crypto](https://robinhood.com/account/crypto) (desktop). **Stocks are not automated via this API** — crypto only.
 
 ---
 
@@ -22,114 +214,29 @@ Monitors **S&P 500 / indices, equities, and multi-crypto**, maps market features
 S = K · (T1 + T2 + T3)
 ```
 
-- **Seeds:** π, e, φ, γ (Euler–Mascheroni), G (Catalan) — zero free parameters  
-- **Domain:** Economics — `D_eff=20`, `hits=3`, `δψ=1.5`, `observed=True`  
-- **Authority:** [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) + physical archive  
-- **Pin check:** `python scripts/verify_fsot_pin.py` → all 35 domain scalars match mpmath (rel err ~1e-15)
-
-### Live method — intrinsic, zero free parameters
-
 | Item | Value |
 |------|--------|
-| Authority | `I:\FSOT-Physical-Archive\02_FSOT-2.1-Lean-Full\vendor\fsot_compute.py` |
-| Method | `fsot_intrinsic_zero_free` |
-| Free parameters | **0** |
-| Economics fold | D_eff=20, hits=3, δψ=1.5, observed=True → S≈0.646 |
-| Finance_Markets fold | D_eff=19, hits=2, δψ=0.75, observed=True → S≈0.571 |
-| Structure | Seed votes (φ multi-scale, φ fractal, γ-strength) on Fib windows |
-| Forbidden | Invented RSI/volume coefficients; per-ticker D_eff fit; S×multiplier+base |
+| Seeds | π, e, φ, γ, Catalan |
+| Economics | D_eff=20, hits=3, δψ=1.5 → S≈0.646 |
+| Finance_Markets | D_eff=19, hits=2, δψ=0.75 → S≈0.571 |
+| Method | `fsot_intrinsic_zero_free` / `fsot_bhs_buy_hold_sell` / `fsot_dynamic_monte_carlo_pattern_collapse` |
+| Forbidden | Free LSQ, invented RSI coefficients, per-ticker D_eff fit |
 
-```
-S = K · (T1 + T2 + T3)   # preregistered fold only
-score = mean(seed structure votes on measured returns)
-signal = sign(score)
-```
+### Monte Carlo + pattern intelligence
 
-### Formal verification
+1. Causal train → discrete FSOT signatures  
+2. φ-EWMA accuracy; solidify when `acc_φ ≥ 0.5 + Poof`  
+3. Collapse TRUE → FSOT μ; FALSE → Poof chaos  
+4. BHS: HOLD unless dual-scale agree + solid quality + edge/field  
 
-Market app **pins** archive `fsot_compute.py` (Economics scalar matches mpmath). Full Lean/Coq/Isabelle/F*/Rust gauntlet stays in `FSOT-2.1-Lean` on the I: hub.
+### Data sources (what is real vs synthetic)
 
-### Historical training data (game drive)
-
-```
-D:\training data\FSOT-Market-History\
-  ohlcv\          # ~20y daily bars (2005→now; crypto from first Yahoo date)
-  patterns\       # emergence series + strategy_ledger_v2.json
-  verification\   # fsot_pin_verification.json
-  manifests\      # download_manifest.json
-  news\           # optional dumps
-```
-
-```powershell
-cd backend
-.\.venv\Scripts\python scripts\download_history.py
-.\.venv\Scripts\python scripts\build_historical_patterns.py
-.\.venv\Scripts\python scripts\verify_fsot_pin.py
-```
-
-### Free news / observer (no credentials)
-
-RSS: Yahoo Finance, CNBC, MarketWatch, CoinDesk, Cointelegraph, Fed press, SEC EDGAR, Google News finance queries.  
-Lexicon `observer_mod ∈ [-1,1]` couples into FSOT `δψ` (observer path).  
-API: `GET /api/news`, `GET /api/news/observer?symbol=SPY`
-
-### Monte Carlo multipath (intelligent / dynamic pattern collapse)
-
-When single-path μ is near coin-flip, ensemble futures + **pattern recognition** carry structure:
-
-1. **Causal train:** walk history; each bar → discrete FSOT signature (D_eff, μ/d_obs/fluc/sentiment signs, Poof, intensity bin).
-2. Score signature vs realized forward return; φ-EWMA accuracy online.
-3. **Solidify** when `acc_φ > 0.5 + Poof` and trials ≥ Fib(8)=8; **soften** on repeated misses (Poof decoherence). Ledgers persist under `D:\training data\FSOT-Market-History\patterns\*_mc_pattern_ledger.json`.
-4. **Dynamic MC:** each day rebuild `δψ`; `p_collapse` from C×phase×sentiment; solidified anchors bias μ direction, collapse, and pattern-conditional bootstrap shocks.
-5. **Collapse TRUE** → FSOT μ + γ-vol; **FALSE** → Poof chaos. Ensemble → P(up), quantiles, most-probable bin, fan chart.
-
-```powershell
-cd backend
-.\.venv\Scripts\python scripts\smoke_dynamic_mc.py
-# Long-term accuracy + intelligence score (writes D:\...\verification\mc_longterm_intelligence_eval.json)
-.\.venv\Scripts\python scripts\eval_longterm_mc_intelligence.py --quick
-# Full multi-symbol run (slower):
-# .\.venv\Scripts\python scripts\eval_longterm_mc_intelligence.py
-# API: GET /api/predict/SPY/montecarlo?horizon=21&n_paths=512&dynamic=true
-```
-
-**Intelligence gate:** only **solidified** signatures may commit LONG/SHORT; unsolidified states stay **FLAT** (fluid possibilities). That gate is the core you can later extract as a standalone pattern-intelligence system (`pattern_memory.py` + solidify/soften + commit gate).
-
----
-
-## Quick start
-
-### 1. Backend
-
-```powershell
-cd C:\Users\damia\Desktop\FSOT-Market-Monitor\backend
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-pip install -r requirements.txt
-uvicorn app.main:app --reload --host 127.0.0.1 --port 8000
-```
-
-- API docs: http://127.0.0.1:8000/docs  
-- Health: http://127.0.0.1:8000/api/health  
-
-### 2. Frontend
-
-```powershell
-cd C:\Users\damia\Desktop\FSOT-Market-Monitor\frontend
-npm install
-npm run dev
-```
-
-Open http://localhost:3000  
-
-Optional: `NEXT_PUBLIC_API_URL=http://127.0.0.1:8000`
-
-### 3. Tests
-
-```powershell
-cd backend
-.\.venv\Scripts\python -m pytest tests/ -q
-```
+| Data | Source |
+|------|--------|
+| OHLCV / quotes | **Real** — Yahoo Finance, CoinGecko (optional local CSV archive) |
+| News observer | **Real** RSS + lexicon sentiment |
+| Paper P&amp;L $ | **Synthetic** dollars on real bars |
+| Broker orders | **Dry-run** unless you enable live flags |
 
 ---
 
@@ -138,126 +245,58 @@ cd backend
 | Method | Path | Description |
 |--------|------|-------------|
 | GET | `/api/health` | Liveness + FSOT pin + Economics S₀ |
-| GET | `/api/watchlist` | Indices / stocks / crypto from config |
+| GET | `/api/watchlist` | Indices / stocks / crypto |
 | GET | `/api/market/{symbol}/ohlcv` | Candles |
-| GET | `/api/market/{symbol}/quote` | Last price snapshot |
-| GET | `/api/predict/{symbol}` | FSOT forecast + telemetry (`include_monte_carlo=true` optional) |
-| GET | `/api/predict/{symbol}/montecarlo` | FSOT Monte Carlo multipath + observer collapse |
-| GET | `/api/predict/batch` | All watchlist signals |
+| GET | `/api/market/{symbol}/quote` | Last price |
+| GET | `/api/predict/{symbol}` | FSOT forecast + telemetry |
+| GET | `/api/predict/{symbol}/montecarlo` | Dynamic MC multipath |
+| GET | `/api/predict/batch` | Watchlist signals |
 | GET | `/api/backtest/{symbol}` | Walk-forward metrics |
-| GET | `/api/paper/{symbol}` | **Synthetic USD** paper portfolio (`capital`, `mode`, `range`) |
-| GET | `/api/broker/status` | Robinhood crypto wire status (**dry-run by default**) |
-| POST | `/api/broker/preview` | Dry-run order preview (never live from this route) |
-| GET | `/api/monitor/forward` | Forward prediction journal summary |
-| POST | `/api/monitor/forward/record` | Record a live forward forecast (score later) |
-| POST | `/api/monitor/forward/resolve` | Resolve forecasts when real future bars exist |
-
-### Synthetic dollar paper portfolio
-
-Theoretical money on **real OHLCV** — adjust starting capital to see P&amp;L and drawdown before live markets:
-
-| Query | Default | Meaning |
-|-------|---------|---------|
-| `capital` | `10000` | Starting synthetic USD (100 … 1e8) |
-| `mode` | `bhs` | `bhs` · `bhs_long_only` · `always_in` · `solid_gated` · `buy_hold` |
-| `hold_horizon` | `5` | Fib hold days (BHS; learn & trade aligned) |
-| `range` | `2y` | History window |
-
-```
-GET /api/paper/SPY?capital=25000&mode=bhs&range=2y
-```
-
-Dashboard: **Buy / Hold / Sell · Synthetic $** — capital presets, mode toggle, equity curve, **commit accuracy**, progress toward 70–80%.
-
-Modes:
-- **bhs** (recommended) — BUY/HOLD/SELL; HOLD default; multi-gate commit (dual-scale + solid pattern + edge)
-- **bhs_long_only** — same but never short
-- **solid_gated** — 1d solid-pattern gate (legacy)
-- **always_in** — every non-flat FSOT μ signal
-- **buy_hold** — 100% long benchmark
-
-Sizing: Kelly \(f^*=1/e\) × edge \(|\mu|/\sigma\). Causal (no lookahead).  
-Eval: `python scripts/eval_bhs_target.py` → report under history `verification/bhs_target_eval.json`.
-
-### Robinhood crypto (wired, not live)
-
-Adapter is ready for **later** real crypto execution; **default is dry-run** (no real orders).
-
-```powershell
-# optional credentials (never commit)
-# copy backend/.env.example → backend/.env
-# FSOT_RH_API_KEY=...
-# FSOT_RH_PRIVATE_KEY_PATH=C:\Users\you\.fsot\robinhood_crypto_private.pem
-
-# status always reports dry_run=true unless you set ALL of:
-# FSOT_BROKER_LIVE=1  FSOT_BROKER_I_UNDERSTAND=YES  FSOT_BROKER_DRY_RUN=0
-curl http://127.0.0.1:8000/api/broker/status
-```
-
-### Forward predictions (future, not only history)
-
-Paper backtests use past data. To test **true** predictive power:
-
-1. `POST /api/monitor/forward/record?symbol=BTC&horizon=5` — log today’s BHS call  
-2. Wait for real bars to pass  
-3. `POST /api/monitor/forward/resolve` — score hit/miss on prices that didn’t exist at record time  
-
-Dashboard: **Forward prediction journal** panel. Ledger under `D:\training data\FSOT-Market-History\monitor\` (or `backend/data/`).
+| GET | `/api/paper/{symbol}` | Synthetic USD portfolio |
+| GET | `/api/broker/status` | Robinhood wire (dry-run) |
+| POST | `/api/broker/preview` | Dry-run order preview |
+| GET | `/api/monitor/forward` | Forward journal summary |
+| POST | `/api/monitor/forward/record` | Record forecast now |
+| POST | `/api/monitor/forward/resolve` | Score when future exists |
+| GET | `/api/news` | Headlines |
+| GET | `/api/news/observer` | Observer mod |
 
 ---
 
 ## Watchlist
 
-Edit `config/watchlist.yaml` to add/remove assets. Defaults include:
-
-- **Indices:** ^GSPC, SPY, ^IXIC, ^DJI  
-- **Stocks:** AAPL, MSFT, GOOGL, AMZN, NVDA, META, TSLA, JPM, JNJ, XOM  
-- **Crypto:** BTC, ETH, SOL, BNB, XRP, ADA, DOGE, AVAX, LINK, LTC  
+Edit `config/watchlist.yaml`. Defaults include major indices, mega-cap equities, and multi-crypto (BTC, ETH, SOL, …).
 
 ---
 
-## Reproducibility checklist
+## Project layout
 
-```powershell
-# 1. Clone
-git clone https://github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns.git
-cd FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns
-
-# 2. Backend
-cd backend
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1   # Windows
-pip install -r requirements.txt
-python -m pytest tests/ -q
-python -m uvicorn app.main:app --host 127.0.0.1 --port 8000
-
-# 3. Frontend (other terminal)
-cd frontend
-npm install
-npm run dev
-
-# 4. Optional: long-term MC intelligence eval
-python scripts/eval_longterm_mc_intelligence.py --quick
-
-# 5. Optional: paper $ smoke
-# GET http://127.0.0.1:8000/api/paper/SPY?capital=10000&mode=solid_gated
+```
+backend/
+  app/fsot/          # intrinsic, monte_carlo, pattern_memory, bhs_engine
+  app/broker/        # robinhood_crypto dry-run
+  app/monitor/       # forward journal
+  app/api/           # FastAPI routes
+  scripts/           # smoke + eval
+  tests/
+frontend/            # Next.js dashboard
+config/watchlist.yaml
 ```
 
-Open http://localhost:3000 · API docs http://127.0.0.1:8000/docs
+Standalone MC-only sandbox (optional side project on Desktop):  
+`C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence` — not required to run this repo.
 
-**Note:** Large 20y OHLCV history is optional (place under `D:\training data\FSOT-Market-History` or download via `scripts/download_history.py`). Live quotes use yfinance / CoinGecko.
+---
 
 ## Lineage
 
 - Physical archive: `I:\FSOT-Physical-Archive`  
-- This repo: full-stack **FSOT Market Monitor** (2.1 intrinsic + dynamic MC + paper $)  
-- Prior scripts retained under `backend/legacy_ref/` for comparison  
-- Theory authority: [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean)  
-- Author: Damian Arthur Palumbo  
+- Prior experiments: `backend/legacy_ref/`  
+- Theory: [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean)  
 
 ---
 
 ## Disclaimer
 
-This is a **research / monitoring** application. It is **not** financial advice.  
-Paper portfolio P&amp;L is **synthetic** (theoretical dollars on historical bars). Walk-forward and Monte Carlo metrics are honest causal estimates — they do not guarantee future performance. Crypto and equity APIs may rate-limit; the app caches OHLCV/quotes.
+**Research / monitoring only — not financial advice.**  
+Synthetic paper P&amp;L and historical commit rates **do not** guarantee future results. Live trading is disabled by default. Cryptocurrency and equity markets involve substantial risk of loss. Crypto held at brokers is typically not SIPC/FDIC insured.

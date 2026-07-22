@@ -6,11 +6,12 @@ import { api, type PaperPortfolioResult } from "@/lib/api";
 type Props = {
   symbol: string;
   range?: string;
+  refreshKey?: number;
 };
 
 const PRESETS = [1_000, 5_000, 10_000, 25_000, 50_000, 100_000];
 
-export default function PaperPortfolio({ symbol, range = "2y" }: Props) {
+export default function PaperPortfolio({ symbol, range = "2y", refreshKey = 0 }: Props) {
   const [capital, setCapital] = useState(10_000);
   const [mode, setMode] = useState<
     "bhs" | "bhs_long_only" | "solid_gated" | "always_in" | "long_only" | "buy_hold"
@@ -35,7 +36,7 @@ export default function PaperPortfolio({ symbol, range = "2y" }: Props) {
 
   useEffect(() => {
     load();
-  }, [load]);
+  }, [load, refreshKey]);
 
   const curve = data?.equity_curve || [];
   const minE = curve.length ? Math.min(...curve.map((c) => c.equity)) : 0;

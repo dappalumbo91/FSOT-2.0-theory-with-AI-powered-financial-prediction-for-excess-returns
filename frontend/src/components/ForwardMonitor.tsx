@@ -5,9 +5,10 @@ import { api, type ForwardSummary, type BrokerStatus } from "@/lib/api";
 
 type Props = {
   symbol: string;
+  refreshKey?: number;
 };
 
-export default function ForwardMonitor({ symbol }: Props) {
+export default function ForwardMonitor({ symbol, refreshKey = 0 }: Props) {
   const [summary, setSummary] = useState<ForwardSummary | null>(null);
   const [broker, setBroker] = useState<BrokerStatus | null>(null);
   const [loading, setLoading] = useState(false);
@@ -25,7 +26,7 @@ export default function ForwardMonitor({ symbol }: Props) {
 
   useEffect(() => {
     refresh();
-  }, [refresh]);
+  }, [refresh, refreshKey, symbol]);
 
   const record = async () => {
     setLoading(true);
