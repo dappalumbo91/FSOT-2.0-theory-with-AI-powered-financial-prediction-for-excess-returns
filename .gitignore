@@ -17,6 +17,9 @@ frontend/out/
 .DS_Store
 Thumbs.db
 *.log
+backend/data/
+**/*private*.pem
+**/*private*.key
 
 # Local history dumps (optional external drive data — not in repo)
 # Place large OHLCV under D:\training data\FSOT-Market-History or set FSOT_HISTORY_ROOT

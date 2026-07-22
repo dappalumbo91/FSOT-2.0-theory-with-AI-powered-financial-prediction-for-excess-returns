@@ -287,12 +287,72 @@ export const api = {
     opts?: { capital?: number; mode?: string; range?: string }
   ) => {
     const capital = opts?.capital ?? 10000;
-    const mode = opts?.mode ?? "solid_gated";
+    const mode = opts?.mode ?? "bhs";
     const range = opts?.range ?? "2y";
     return get<PaperResponse>(
       `/api/paper/${encodeURIComponent(symbol)}?capital=${capital}&mode=${mode}&range=${range}`
     );
   },
+  brokerStatus: () => get<BrokerStatus>("/api/broker/status"),
+  forwardSummary: () => get<ForwardSummary>("/api/monitor/forward"),
+  forwardRecord: (symbol: string, horizon = 5) =>
+    post<ForwardRecordResponse>(
+      `/api/monitor/forward/record?symbol=${encodeURIComponent(symbol)}&horizon=${horizon}`
+    ),
+  forwardResolve: (symbol?: string) =>
+    post<ForwardResolveResponse>(
+      symbol
+        ? `/api/monitor/forward/resolve?symbol=${encodeURIComponent(symbol)}`
+        : "/api/monitor/forward/resolve"
+    ),
+};
+
+async function post<T>(path: string): Promise<T> {
+  const API_BASE = process.env.NEXT_PUBLIC_API_URL || "http://127.0.0.1:8000";
+  const res = await fetch(`${API_BASE}${path}`, { method: "POST", cache: "no-store" });
+  if (!res.ok) {
+    const text = await res.text();
+    throw new Error(text || res.statusText);
+  }
+  return res.json() as Promise<T>;
+}
+
+export type BrokerStatus = {
+  provider: string;
+  dry_run: boolean;
+  live_trading_enabled: boolean;
+  can_place_live: boolean;
+  credentials_configured: boolean;
+  signing_ready: boolean;
+  max_order_usd: number;
+  allowed_symbols: string[];
+  safety?: string;
+};
+
+export type ForwardSummary = {
+  path: string;
+  n_total: number;
+  n_open: number;
+  n_resolved: number;
+  n_directional_commits: number;
+  forward_commit_accuracy: number | null;
+  by_symbol?: Record<string, { n: number; accuracy: number }>;
+  note?: string;
+};
+
+export type ForwardRecordResponse = {
+  error: string | null;
+  entry?: {
+    action: string;
+    price_at_prediction: number;
+    horizon_days: number;
+    symbol: string;
+  };
+};
+
+export type ForwardResolveResponse = {
+  n_resolved: number;
+  n_still_open: number;
 };
 
 export type PaperPortfolioResult = {

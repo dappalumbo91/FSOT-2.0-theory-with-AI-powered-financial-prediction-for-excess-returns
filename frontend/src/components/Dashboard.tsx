@@ -18,6 +18,7 @@ import WatchlistGrid from "./WatchlistGrid";
 import BacktestCard from "./BacktestCard";
 import MonteCarloPanel from "./MonteCarloPanel";
 import PaperPortfolio from "./PaperPortfolio";
+import ForwardMonitor from "./ForwardMonitor";
 
 type Tab = "all" | "indices" | "stocks" | "crypto";
 
@@ -280,6 +281,7 @@ export default function Dashboard() {
 
           <BacktestCard data={backtest} loading={loadingBt} symbol={symbol} />
           <PaperPortfolio symbol={symbol} range={range === "3mo" || range === "6mo" ? "1y" : range === "1y" ? "2y" : range} />
+          <ForwardMonitor symbol={symbol} />
         </section>
 
         {/* Right FSOT */}

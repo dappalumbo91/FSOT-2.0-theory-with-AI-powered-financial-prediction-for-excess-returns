@@ -9,7 +9,7 @@ from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 
 from app import __version__
-from app.api import backtest, health, history, market, news, paper, predict
+from app.api import backtest, broker, health, history, market, monitor, news, paper, predict
 
 logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 log = logging.getLogger("fsot-market")
@@ -47,6 +47,8 @@ app.include_router(market.router)
 app.include_router(predict.router)
 app.include_router(backtest.router)
 app.include_router(paper.router)
+app.include_router(broker.router)
+app.include_router(monitor.router)
 app.include_router(news.router)
 app.include_router(history.router)
 

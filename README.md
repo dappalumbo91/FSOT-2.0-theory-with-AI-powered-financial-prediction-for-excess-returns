@@ -146,6 +146,11 @@ cd backend
 | GET | `/api/predict/batch` | All watchlist signals |
 | GET | `/api/backtest/{symbol}` | Walk-forward metrics |
 | GET | `/api/paper/{symbol}` | **Synthetic USD** paper portfolio (`capital`, `mode`, `range`) |
+| GET | `/api/broker/status` | Robinhood crypto wire status (**dry-run by default**) |
+| POST | `/api/broker/preview` | Dry-run order preview (never live from this route) |
+| GET | `/api/monitor/forward` | Forward prediction journal summary |
+| POST | `/api/monitor/forward/record` | Record a live forward forecast (score later) |
+| POST | `/api/monitor/forward/resolve` | Resolve forecasts when real future bars exist |
 
 ### Synthetic dollar paper portfolio
 
@@ -173,6 +178,31 @@ Modes:
 
 Sizing: Kelly \(f^*=1/e\) × edge \(|\mu|/\sigma\). Causal (no lookahead).  
 Eval: `python scripts/eval_bhs_target.py` → report under history `verification/bhs_target_eval.json`.
+
+### Robinhood crypto (wired, not live)
+
+Adapter is ready for **later** real crypto execution; **default is dry-run** (no real orders).
+
+```powershell
+# optional credentials (never commit)
+# copy backend/.env.example → backend/.env
+# FSOT_RH_API_KEY=...
+# FSOT_RH_PRIVATE_KEY_PATH=C:\Users\you\.fsot\robinhood_crypto_private.pem
+
+# status always reports dry_run=true unless you set ALL of:
+# FSOT_BROKER_LIVE=1  FSOT_BROKER_I_UNDERSTAND=YES  FSOT_BROKER_DRY_RUN=0
+curl http://127.0.0.1:8000/api/broker/status
+```
+
+### Forward predictions (future, not only history)
+
+Paper backtests use past data. To test **true** predictive power:
+
+1. `POST /api/monitor/forward/record?symbol=BTC&horizon=5` — log today’s BHS call  
+2. Wait for real bars to pass  
+3. `POST /api/monitor/forward/resolve` — score hit/miss on prices that didn’t exist at record time  
+
+Dashboard: **Forward prediction journal** panel. Ledger under `D:\training data\FSOT-Market-History\monitor\` (or `backend/data/`).
 
 ---
 
