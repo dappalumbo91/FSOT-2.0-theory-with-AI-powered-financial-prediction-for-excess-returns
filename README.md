@@ -43,7 +43,7 @@ These are **causal historical** evaluations (not live guarantees). Target band f
 ```powershell
 cd backend
 .\.venv\Scripts\python scripts\eval_bhs_target.py
-# → D:\training data\FSOT-Market-History\verification\bhs_target_eval.json
+# → <local file, not included in repo: bhs_target_eval.json>
 ```
 
 ### Monte Carlo intelligence (pattern solidify + observer collapse)
@@ -80,7 +80,7 @@ cd backend
 - **Windows / macOS / Linux**
 - **Python 3.11+**
 - **Node.js 18+** (frontend)
-- Optional: long history on `D:\training data\FSOT-Market-History` (or any path after download)
+- Optional: long history on `<local folder, not included in repo: training data/FSOT-Market-History>` (or any path after download)
 
 ### Backend (`backend/requirements.txt`)
 
@@ -186,7 +186,7 @@ cd backend
 Default archive layout:
 
 ```
-D:\training data\FSOT-Market-History\
+<local folder, not included in repo: training data/FSOT-Market-History>
   ohlcv\          # daily bars
   patterns\       # MC pattern ledgers
   verification\   # eval JSON outputs
@@ -286,7 +286,7 @@ config/watchlist.yaml
 ```
 
 Standalone MC-only sandbox (optional side project on Desktop):  
-`C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence` — not required to run this repo.
+`FSOT-Monte-Carlo-Intelligence` — not required to run this repo.
 
 ### Full methodology & reproducibility
 
@@ -297,7 +297,7 @@ Standalone MC-only sandbox (optional side project on Desktop):
 
 ## Lineage
 
-- Physical archive: `I:\FSOT-Physical-Archive`  
+- Physical archive: `<local folder, not included in repo: FSOT-Physical-Archive>`  
 - Prior experiments: `backend/legacy_ref/`  
 - Theory: [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean)  
 

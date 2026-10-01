@@ -190,7 +190,7 @@ For each causal bar \(j\) with prediction direction \(d_{\mathrm{pred}}\) and re
 **Quality flag:** solid **and** raw accuracy **and** \(\mathrm{acc}_\varphi\) still clear solidify bar → eligible for commit bias.
 
 Ledgers (optional persist):  
-`D:\training data\FSOT-Market-History\patterns\{SYM}_mc_pattern_ledger.json`
+`<local file, not included in repo: {SYM}_mc_pattern_ledger.json>`
 
 ---
 
