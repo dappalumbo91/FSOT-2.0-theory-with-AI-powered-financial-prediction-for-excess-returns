@@ -5,10 +5,22 @@ Purpose: test whether FSOT predicts *future* outcomes, not only historical
 walk-forwards. At time T we record a signal + horizon; at T+H we resolve
 against real prices that did not exist at prediction time.
 
-Storage: local JSON ledger (default under D:\\training data or ./data).
+Storage: local JSON ledger (default under $FSOT_TRAINING_DATA or ./data).
 """
 
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[3]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import uuid
@@ -24,7 +36,7 @@ from app.fsot.pattern_memory import PatternMemory
 
 
 def _default_path() -> Path:
-    pref = Path(r"D:\training data\FSOT-Market-History\monitor")
+    pref = _fsot_local_path('FSOT_TRAINING_DATA', 'data_external/training_data') / 'FSOT-Market-History' / 'monitor'
     try:
         pref.mkdir(parents=True, exist_ok=True)
         return pref / "forward_journal.json"

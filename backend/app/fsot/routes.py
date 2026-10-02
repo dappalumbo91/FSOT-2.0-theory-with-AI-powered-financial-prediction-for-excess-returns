@@ -1,5 +1,5 @@
 """
-Preregistered FSOT domain routes — authority from I:\\FSOT-Physical-Archive.
+Preregistered FSOT domain routes — authority from $FSOT_PHYSICAL_ARCHIVE.
 
 These are fractal coordinates of one seed engine, NOT free fit parameters.
 Sources:

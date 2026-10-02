@@ -1,4 +1,4 @@
-"""FSOT 2.1 — pinned from I:\\FSOT-Physical-Archive (zero free parameters)."""
+"""FSOT 2.1 — pinned from $FSOT_PHYSICAL_ARCHIVE (zero free parameters)."""
 
 from app.fsot.intrinsic import (
     compute_intrinsic_frame,

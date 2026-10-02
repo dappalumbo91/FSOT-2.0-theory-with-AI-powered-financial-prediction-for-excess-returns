@@ -1,7 +1,7 @@
 """
 FSOT market predictor — full engine + econophysics seed laws.
 
-Authority (I:\\FSOT-Physical-Archive\\02_FSOT-2.1-Lean-Full):
+Authority (FSOT-2.1-Lean):
   vendor/fsot_compute.py — S = K·(T1+T2+T3), growth, quirk_mod, consciousness
   vendor/neurolab_residual/econophysics_public_anchors.json:
     Hurst H = 0.5, vol persistence β = γ ≈ 0.577, Kelly f* = 1/e,
@@ -566,7 +566,7 @@ def latest_intrinsic(
     return {
         "error": None,
         "method": "fsot_full_engine_econophysics",
-        "authority": "I:/FSOT-Physical-Archive/02_FSOT-2.1-Lean-Full/vendor/fsot_compute.py",
+        "authority": "FSOT-2.1-Lean/vendor/fsot_compute.py",
         "free_parameters": 0,
         "symbol": symbol,
         "S": float(last["S_live"]),

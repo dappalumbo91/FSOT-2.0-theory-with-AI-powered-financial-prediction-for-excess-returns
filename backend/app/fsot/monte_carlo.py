@@ -580,7 +580,7 @@ def run_dynamic_fsot_monte_carlo(
     Full intelligent pipeline:
       1) Causal pattern training on history (solidify accurate FSOT signatures)
       2) Forward multipath MC biased by solidified anchors
-      3) Optional persist ledger under D:\\training data\\FSOT-Market-History\\patterns
+      3) Optional persist ledger under $FSOT_TRAINING_DATA/FSOT-Market-History/patterns
     """
     if df is None or len(df) < window + 30:
         return {"error": "insufficient_data"}

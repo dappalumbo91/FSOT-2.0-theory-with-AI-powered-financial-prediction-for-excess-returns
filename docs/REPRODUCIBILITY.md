@@ -42,11 +42,11 @@
 These are **not required** for basic reproduction (live APIs work without them):
 
 ```
-D:\training data\FSOT-Market-History\     # OHLCV + ledgers + verification dumps
-I:\FSOT-Physical-Archive\                # mpmath authority source (vendored pin also in-repo)
+<local folder, not included in repo: training data/FSOT-Market-History>     # OHLCV + ledgers + verification dumps
+<local folder, not included in repo: FSOT-Physical-Archive>                # mpmath authority source (vendored pin also in-repo)
 ```
 
-If `D:\...` is missing, eval scripts that load CSV will fail for those symbols; use live `GET /api/paper/...` instead, or run `scripts/download_history.py`.
+If `<local drive>` is missing, eval scripts that load CSV will fail for those symbols; use live `GET /api/paper/...` instead, or run `scripts/download_history.py`.
 
 ---
 
@@ -64,7 +64,7 @@ Record the commit hash next to any metrics you publish.
 **Windows desktop layout (author):**
 
 ```
-C:\Users\damia\Desktop\FSOT-Market-Monitor   # this repo working copy
+<local folder, not included in repo: FSOT-Market-Monitor>   # this repo working copy
 ```
 
 ---
@@ -217,7 +217,7 @@ All commands from `backend/` with venv active.
 | Mode | BHS multi-gate |
 
 **Output:** console table +  
-`D:\training data\FSOT-Market-History\verification\bhs_target_eval.json`  
+`<local file, not included in repo: bhs_target_eval.json>`  
 (if D: unavailable, script may need path edit—or copy logic to write under `backend/scripts/`).
 
 **How to report:**
@@ -284,7 +284,7 @@ Ledger: `...\monitor\forward_journal.json` or `backend/data/forward_journal.json
 ### 6.2 Expected layout
 
 ```
-D:\training data\FSOT-Market-History\
+<local folder, not included in repo: training data/FSOT-Market-History>
   ohlcv\{SYMBOL}.csv
   patterns\{SYMBOL}_mc_pattern_ledger.json
   verification\
@@ -375,11 +375,11 @@ FSOT-Market-Monitor/
 Intelligence-only sandbox (no UI):
 
 ```
-C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence
+FSOT-Monte-Carlo-Intelligence
 ```
 
 ```powershell
-cd C:\Users\damia\Desktop\FSOT-Monte-Carlo-Intelligence
+cd FSOT-Monte-Carlo-Intelligence
 python -m venv .venv
 .\.venv\Scripts\pip install -r requirements.txt
 .\.venv\Scripts\python -m pytest tests/ -q

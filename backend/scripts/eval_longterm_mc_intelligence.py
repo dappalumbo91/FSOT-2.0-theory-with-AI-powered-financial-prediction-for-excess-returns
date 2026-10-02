@@ -6,11 +6,23 @@ Also scores the MC layer as a standalone *pattern-intelligence* system
 (for possible extraction later): solidification growth, refinement lift,
 solid-only hit rate, early vs late epochs.
 
-Uses only history on D:\\training data\\FSOT-Market-History\\ohlcv
+Uses only history on $FSOT_TRAINING_DATA/FSOT-Market-History/ohlcv
 and FSOT seeds (free_parameters=0).
 """
 
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[2]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import sys
@@ -26,7 +38,7 @@ import pandas as pd
 from app.fsot.monte_carlo import run_fsot_monte_carlo, train_pattern_memory
 from app.fsot.pattern_memory import PatternMemory, SOLIDIFY_ACC, extract_state
 
-HISTORY = Path(r"D:\training data\FSOT-Market-History")
+HISTORY = _fsot_local_path('FSOT_TRAINING_DATA', 'data_external/training_data') / 'FSOT-Market-History'
 OUT_DIR = HISTORY / "verification"
 OHLCV = HISTORY / "ohlcv"
 
