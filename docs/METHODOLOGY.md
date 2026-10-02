@@ -1,7 +1,7 @@
 # FSOT Market Monitor — Methodology
 
 **Version:** research snapshot 2026-07-22  
-**Repository:** https://github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns  
+**Repository:** https://github.com/dappalumbo91/fsot-market-monitor  
 **Theory authority:** https://github.com/dappalumbo91/FSOT-2.1-Lean · pin `backend/app/fsot/PIN.json`  
 **Free parameters:** **0**
 

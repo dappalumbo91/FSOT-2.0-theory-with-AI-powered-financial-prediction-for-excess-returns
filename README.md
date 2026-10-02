@@ -4,7 +4,7 @@
 
 | | |
 |--|--|
-| **Repo** | [github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns](https://github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns) |
+| **Repo** | [github.com/dappalumbo91/fsot-market-monitor](https://github.com/dappalumbo91/fsot-market-monitor) |
 | **Theory** | [FSOT-2.1-Lean](https://github.com/dappalumbo91/FSOT-2.1-Lean) |
 | **Methodology** | [`docs/METHODOLOGY.md`](docs/METHODOLOGY.md) — full scientific method |
 | **Reproducibility** | [`docs/REPRODUCIBILITY.md`](docs/REPRODUCIBILITY.md) — clone → metrics end-to-end |
@@ -113,8 +113,8 @@ cryptography>=43.0.0
 ### 1. Clone & backend
 
 ```powershell
-git clone https://github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns.git
-cd FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns
+git clone https://github.com/dappalumbo91/fsot-market-monitor.git
+cd fsot-market-monitor
 
 cd backend
 python -m venv .venv

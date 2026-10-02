@@ -53,8 +53,8 @@ If `D:\...` is missing, eval scripts that load CSV will fail for those symbols; 
 ## 2. Obtain the source
 
 ```powershell
-git clone https://github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns.git
-cd FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns
+git clone https://github.com/dappalumbo91/fsot-market-monitor.git
+cd fsot-market-monitor
 git rev-parse HEAD
 git log -1 --oneline
 ```
@@ -430,8 +430,8 @@ When sharing results:
 
 ```powershell
 # From empty machine with git, python, node installed
-git clone https://github.com/dappalumbo91/FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns.git
-cd FSOT-2.0-theory-with-AI-powered-financial-prediction-for-excess-returns
+git clone https://github.com/dappalumbo91/fsot-market-monitor.git
+cd fsot-market-monitor
 
 cd backend
 python -m venv .venv
