@@ -22,5 +22,8 @@ backend/data/
 **/*private*.key
 
 # Local history dumps (optional external drive data — not in repo)
-# Place large OHLCV under D:\training data\FSOT-Market-History or set FSOT_HISTORY_ROOT
+# Place large OHLCV under $FSOT_TRAINING_DATA/FSOT-Market-History or set FSOT_HISTORY_ROOT
 *.csv.gz
+
+# Local external data (see FSOT_* env vars); never committed
+data_external/

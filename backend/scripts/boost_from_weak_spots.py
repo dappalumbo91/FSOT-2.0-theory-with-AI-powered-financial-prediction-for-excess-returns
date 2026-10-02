@@ -7,6 +7,18 @@
 
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[2]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import sys
 from datetime import datetime, timezone
@@ -21,7 +33,7 @@ sys.path.insert(0, str(ROOT))
 from app.fsot.weak_spots import aggregate_weak_spots, diagnose_symbol  # noqa: E402
 from app.predict.boosted import evaluate_boosted  # noqa: E402
 
-HISTORY = Path(r"D:\training data\FSOT-Market-History")
+HISTORY = _fsot_local_path('FSOT_TRAINING_DATA', 'data_external/training_data') / 'FSOT-Market-History'
 OHLCV = HISTORY / "ohlcv"
 OUT = HISTORY / "patterns"
 OUT.mkdir(parents=True, exist_ok=True)

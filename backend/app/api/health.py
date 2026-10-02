@@ -28,7 +28,7 @@ def health():
             "formula": "S = K * (T1 + T2 + T3)",
             "free_parameters": 0,
             "method": "fsot_intrinsic_zero_free",
-            "authority": "I:/FSOT-Physical-Archive/02_FSOT-2.1-Lean-Full/vendor/fsot_compute.py",
+            "authority": "FSOT-2.1-Lean/vendor/fsot_compute.py",
             "K": spine["Economics"]["K"],
             "economics_S": spine["Economics"]["S"],
             "finance_markets_S": spine["Finance_Markets"]["S"],

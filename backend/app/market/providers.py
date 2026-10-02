@@ -2,6 +2,18 @@
 
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[3]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import logging
 from datetime import datetime, timezone
 from functools import lru_cache
@@ -19,7 +31,7 @@ log = logging.getLogger(__name__)
 
 ROOT = Path(__file__).resolve().parents[3]
 WATCHLIST_PATH = ROOT / "config" / "watchlist.yaml"
-HISTORY_OHLCV = Path(r"D:\training data\FSOT-Market-History\ohlcv")
+HISTORY_OHLCV = _fsot_local_path('FSOT_TRAINING_DATA', 'data_external/training_data') / 'FSOT-Market-History' / 'ohlcv'
 
 COINGECKO = "https://api.coingecko.com/api/v3"
 BINANCE_KLINES = "https://api.binance.com/api/v3/klines"

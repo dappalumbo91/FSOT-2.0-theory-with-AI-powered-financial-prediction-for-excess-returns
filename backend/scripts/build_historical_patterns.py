@@ -2,10 +2,22 @@
 """
 Build FSOT emergence/entropy historical pattern ledger from downloaded OHLCV.
 
-Writes to: D:\\training data\\FSOT-Market-History\\patterns\\
+Writes to: $FSOT_TRAINING_DATA/FSOT-Market-History/patterns
 """
 
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[2]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import sys
@@ -22,7 +34,7 @@ from app.backtest.walk_forward import walk_forward_backtest  # noqa: E402
 from app.fsot.emergence import compute_emergence_frame  # noqa: E402
 from app.predict.engine import PredictEngine  # noqa: E402
 
-HISTORY = Path(r"D:\training data\FSOT-Market-History")
+HISTORY = _fsot_local_path('FSOT_TRAINING_DATA', 'data_external/training_data') / 'FSOT-Market-History'
 OHLCV = HISTORY / "ohlcv"
 PATTERNS = HISTORY / "patterns"
 PATTERNS.mkdir(parents=True, exist_ok=True)

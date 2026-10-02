@@ -8,6 +8,18 @@ It certifies that the app's float path matches vendor/fsot_compute.py domain sca
 
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[2]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import sys
 from datetime import datetime, timezone
@@ -20,7 +32,7 @@ sys.path.insert(0, str(ROOT / "app" / "fsot"))
 from app.fsot.domain import ECONOMICS_DOMAIN  # noqa: E402
 from app.fsot.fast import ScalarInputF, compute_scalar_fast  # noqa: E402
 
-OUT = Path(r"D:\training data\FSOT-Market-History\verification")
+OUT = _fsot_local_path('FSOT_TRAINING_DATA', 'data_external/training_data') / 'FSOT-Market-History' / 'verification'
 OUT.mkdir(parents=True, exist_ok=True)
 
 
@@ -66,7 +78,7 @@ def main() -> int:
         "lean_note": (
             "Lean/Coq/Isabelle/F*/Rust obligation gauntlet is NOT executed inside "
             "FSOT-Market-Monitor. Authority is pinned compute from "
-            "I:\\FSOT-Physical-Archive\\02_FSOT-2.1-Lean-Full\\vendor\\fsot_compute.py "
+            "FSOT-2.1-Lean/vendor/fsot_compute.py "
             "matching FSOT-2.1-Lean. Run scripts/run_publication_verification_bundle.py "
             "in the Lean repo for formal obligations."
         ),

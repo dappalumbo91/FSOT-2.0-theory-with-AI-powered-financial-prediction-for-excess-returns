@@ -5,6 +5,18 @@ Evaluate Buy/Hold/Sell progress toward 70–80% commit accuracy + paper profit.
 
 from __future__ import annotations
 
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[2]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
+
 import json
 import sys
 from pathlib import Path
@@ -16,8 +28,8 @@ import pandas as pd
 
 from app.fsot.bhs_engine import run_bhs_backtest
 
-HISTORY = Path(r"D:\training data\FSOT-Market-History\ohlcv")
-OUT = Path(r"D:\training data\FSOT-Market-History\verification\bhs_target_eval.json")
+HISTORY = _fsot_local_path('FSOT_TRAINING_DATA', 'data_external/training_data') / 'FSOT-Market-History' / 'ohlcv'
+OUT = _fsot_local_path('FSOT_TRAINING_DATA', 'data_external/training_data') / 'FSOT-Market-History' / 'verification' / 'bhs_target_eval.json'
 SYMBOLS = ["SPY", "QQQ", "AAPL", "MSFT", "NVDA", "BTC", "ETH", "IWM"]
 
 

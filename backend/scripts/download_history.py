@@ -2,10 +2,22 @@
 """
 Download ~20 years of OHLCV for FSOT Market Monitor watchlist.
 
-Target: D:\\training data\\FSOT-Market-History\\ohlcv
+Target: $FSOT_TRAINING_DATA/FSOT-Market-History/ohlcv
 """
 
 from __future__ import annotations
+
+import os as _os
+from pathlib import Path as _Path
+
+_REPO_ROOT = _Path(__file__).resolve().parents[2]
+
+
+def _fsot_local_path(env, default):
+    """Local path outside the repo: $env if set, else a path relative to the repo root."""
+    _v = _os.environ.get(env, "").strip()
+    return _Path(_v) if _v else _REPO_ROOT / default
+
 
 import json
 import sys
@@ -19,7 +31,7 @@ import yfinance as yf
 import yaml
 
 ROOT = Path(__file__).resolve().parents[2]
-HISTORY_ROOT = Path(r"D:\training data\FSOT-Market-History")
+HISTORY_ROOT = _fsot_local_path('FSOT_TRAINING_DATA', 'data_external/training_data') / 'FSOT-Market-History'
 OHLCV_DIR = HISTORY_ROOT / "ohlcv"
 MANIFEST_DIR = HISTORY_ROOT / "manifests"
 WATCHLIST = ROOT / "config" / "watchlist.yaml"

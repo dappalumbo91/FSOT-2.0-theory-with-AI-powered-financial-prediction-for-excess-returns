@@ -166,6 +166,6 @@ def theory_constants() -> dict[str, Any]:
         "free_parameters": 0,
         "Economics_S": spine["Economics"]["S"],
         "Finance_Markets_S": spine["Finance_Markets"]["S"],
-        "authority": "I:/FSOT-Physical-Archive/02_FSOT-2.1-Lean-Full/vendor/fsot_compute.py",
+        "authority": "FSOT-2.1-Lean/vendor/fsot_compute.py",
         "monte_carlo": "fsot_dynamic_monte_carlo_pattern_collapse",
     }
